@@ -138,7 +138,7 @@ class CaseScraper(object):
               if c % 100 == 0:
                 with open(self.outfile, 'w') as fp:
                   json.dump(cases, fp, indent=2)
-                if c % 5000 == 0:
+                if (c/end*100) % 10 == 0:
                   if self.emails:
                     helper.sendEmail(c,end)
          with open(self.outfile, 'w') as fp:
