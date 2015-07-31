@@ -44,7 +44,6 @@ def main():
         caseUrls = scrape.scrapeVolumes()
           #check for case limit
 
-          
         #Grab cases
         cScraper = scrapers.CaseScraper(args.stopCase, caseUrls, args.output, args.emailsend, baseURL)
         cases = cScraper.getCases()

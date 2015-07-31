@@ -1,6 +1,7 @@
 import networkx as nx
 from networkx.readwrite import json_graph
 import json
+import re
 #import matplotlib.pyplot as plt
 import helper
 
@@ -13,31 +14,32 @@ class GraphBuilder(object):
       self.baseURL = baseURL
 
     def getYear(self, dat):
-         if len(dat) > 1:
-              yrs = re.findall('(?<= )\d{1,4}$', dat)
-              return int(yrs[0])
-         else:
-              return 0
+      """Extract the Year from the Case Date"""
+      if len(dat) > 1:
+        yrs = re.findall('(?<= )\d{1,4}$', dat)
+        return int(yrs[0])
+      else:
+        return 0
 
     def checkCase(self, citation, caseDict, volumes):
-         x = 1
-         if citation in caseDict:
-              return x, citation
-         else:
-              #where volume == citation[0], case where floor of case
-              #limit search to this volume
-              v = citation[0] - 1
-              #assign to the lower case
-              for c in volumes[v]:
-                   if citation[1] > c:
-                        lowCite = [citation[0], c]
-                        x = 0
-                        return x, lowCite
-              return 0, "NULL"          
+      """ Find the case from the page of the citation (first page of the case)"""
+      if citation in caseDict:
+        return 1, citation
+      else:
+        #where volume == citation[0], case where floor of case
+        #limit search to this volume
+        v = citation[0] - 1
+        #assign to the lower case
+        for c in volumes[v]:
+          if citation[1] > c:
+            lowCite = [citation[0], c]
+            return 0, lowCite
+      return 0, "NULL"       
 
     ### Develop visual Network graph
     ### use networkx
     def drawGraph(self):
+         """Build a Network graph from the citations in a json-derived dictionary"""
          G=nx.Graph()
          cases = []
          vols = []
@@ -66,7 +68,7 @@ class GraphBuilder(object):
               c = case['number']
               nodeN= str(c)
               for cite in case['citations']:
-                   if cite[0] > 0 and cite[0] < 576:
+                   if len(cite) > 0 and cite[0] > 0 and cite[0] < 576:
                         if cite != c:
                              x, checkedCite = self.checkCase(cite, cases, vols)
                              if x == 1:

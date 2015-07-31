@@ -3,14 +3,14 @@ import config
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-def sendEmail(num, total):
+def sendEmail(per, num, total):
     
-    if num == O:
+    if num == 0:
         subject = "Volumes Scraped Starting Case Scraper"
-        text = str(total)+ " cases to scrape"
+        text = "There are " + str(total) + " cases to scrape"
     else:
-        subject = 'Your Script is through '+str(num)+' cases'
-        text = "You are now "+str(float(num)/float(total))+" complete with your crawl"
+        subject = 'Your Script is through '+str(per)+ '% ('+str(num)+'/'+str(total)+ ') cases'
+        text = "You are now "+str(per)+"% complete with your crawl"
     emailSend(subject, text)
 
 def emailSend(subject, text, smtpserver=config.server):

@@ -3,6 +3,8 @@ import re
 from lxml import html
 import json
 import helper
+import unidecode
+from math import floor
 
 #Class to run through the SCOTUS volumes and collect the Case Names and URLS
 class VolScraper(object):
@@ -17,7 +19,7 @@ class VolScraper(object):
           for i in xrange(self.sttV, (self.stpV + 1)):
               vn = str(i)
               if i % 5 == 0:
-                    print vn
+                    print "Current Volume: " + str(vn)
               vol = urllib2.urlopen(self.bURL+"/cases/federal/us/"+vn+"/").read()
               #print vol
               ### Parse to find all opinion links
@@ -29,7 +31,7 @@ class VolScraper(object):
                    ##
                    if i > 105:
                         #Grab Date for volumes over 105
-                        text = res.text_content()
+                        text = unidecode.unidecode(res.text_content())
                         d = re.findall('[A-Z][a-z]+ \d{1,2}, \d{4}', text )
                         if len(d) > 0:
                              dat = d[0]
@@ -84,9 +86,9 @@ class CaseScraper(object):
         op = ""
         for o in opinion:
              op = op + o.text_content()
-        caseText = op
-        caseRef = self.caseExtract(op)
-        return caseText, caseRef
+        unicodeCaseText = unidecode.unidecode(op)
+        caseRef = self.caseExtract(unicodeCaseText)
+        return unicodeCaseText, caseRef
 
     def setUrls(self, v):
          suffix = [""]
@@ -95,7 +97,7 @@ class CaseScraper(object):
          elif v < 565:
               suffix = suffix + ["opinion", "concurrence", "dissent"]
          else:
-              suffix= suffix + ["opinion3", "concur4", "concur5"]
+              suffix= suffix + ["opinion3", "concur4", "concur5", "dissent5", "dissent6"]
          return suffix
 
     def fetchCaseText(self, caseUrl, suffix):
@@ -138,9 +140,9 @@ class CaseScraper(object):
               if c % 100 == 0:
                 with open(self.outfile, 'w') as fp:
                   json.dump(cases, fp, indent=2)
-                if (c/end*100) % 10 == 0:
-                  if self.emails:
-                    helper.sendEmail(c,end)
+              per = int(floor((float(c)/float(end)*100)))
+              if per % 10 == 0 and self.emails:
+                helper.sendEmail(per, c,end)
          with open(self.outfile, 'w') as fp:
               json.dump(cases, fp, indent=2)
          print problemCases
