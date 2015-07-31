@@ -135,7 +135,7 @@ class CaseScraper(object):
                 txt, citations = self.fetchCaseText(cL[c]['url'], links[l])
                 if txt != None:
                   text = text + txt
-                  cites.append(citations)
+                  cites = cites + citations
               cases.append({'name': cL[c]['caseName'], 'url': cL[c]['url'], 'txt': text, 'number': cNum, 'citations': cites, 'vol': cL[c]['vol'], 'date': cL[c]['date']})
               if c % 100 == 0:
                 with open(self.outfile, 'w') as fp:

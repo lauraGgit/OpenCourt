@@ -34,7 +34,7 @@ class GraphBuilder(object):
           if citation[1] > c:
             lowCite = [citation[0], c]
             return 0, lowCite
-      return 0, "NULL"       
+      return 0, "NULL"      
 
     ### Develop visual Network graph
     ### use networkx
@@ -58,6 +58,7 @@ class GraphBuilder(object):
               yr = self.getYear(case['date'])
               G.add_node(nodeN, name=case['name'], url=self.baseURL+case['url'], vol=case['vol'], d=case['date'], year=yr)
          #print vols
+         print cases
          for i in xrange(575):
               vols[i].sort()
          print "1st cases comp"
@@ -68,9 +69,12 @@ class GraphBuilder(object):
               c = case['number']
               nodeN= str(c)
               for cite in case['citations']:
-                   if len(cite) > 0 and cite[0] > 0 and cite[0] < 576:
+                   #print cite
+                   if cite[0] > 0 and cite[0] < 576:
                         if cite != c:
                              x, checkedCite = self.checkCase(cite, cases, vols)
+                             #print x
+                             #print checkedCite
                              if x == 1:
                                   sC = 1 + sC
                              else:
