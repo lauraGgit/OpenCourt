@@ -1,9 +1,6 @@
-import urllib2
-import re
+import urllib2, re, json, unidecode, time
 from lxml import html
-import json
 import helper
-import unidecode
 from math import floor
 
 #Class to run through the SCOTUS volumes and collect the Case Names and URLS
@@ -112,6 +109,7 @@ class CaseScraper(object):
 
     ### Grab Cases
     def getCases(self):
+         lt = time.asctime(time.localtime(time.time()))
          problemCases, cases = [], []
          cL = self.caseLinks
          if self.stopCase == False:
@@ -119,7 +117,9 @@ class CaseScraper(object):
               print "Number of cases " + str(end)
          else:
               end = self.stopCase
-         lastVol = 0
+          # for sometimes count variables to only print once
+         lastVol, lastPer = 0, -1
+         # Loop through cases
          for c in xrange(end):
               vol = cL[c]['vol']
               dock = self.urlParse(cL[c]['url'])
@@ -131,18 +131,25 @@ class CaseScraper(object):
               links = self.setUrls(vol)
               text = ""
               cites = []
+              #Loop through each set of urls to scrape
               for l in xrange(len(links)):
                 txt, citations = self.fetchCaseText(cL[c]['url'], links[l])
                 if txt != None:
                   text = text + txt
                   cites = cites + citations
+              #Add to the list of cases the case information
               cases.append({'name': cL[c]['caseName'], 'url': cL[c]['url'], 'txt': text, 'number': cNum, 'citations': cites, 'vol': cL[c]['vol'], 'date': cL[c]['date']})
+              #Save every hunderd cases
               if c % 100 == 0:
                 with open(self.outfile, 'w') as fp:
                   json.dump(cases, fp, indent=2)
+
+              #Email every 10% of cases
               per = int(floor((float(c)/float(end)*100)))
-              if per % 10 == 0 and self.emails:
-                helper.sendEmail(per, c,end)
+              if per % 10 == 0 and self.emails and per > lastPer:
+                helper.sendEmail(per, c,end, lt)
+                lastPer = per
+        #Save at the end of the loop
          with open(self.outfile, 'w') as fp:
               json.dump(cases, fp, indent=2)
          print problemCases
