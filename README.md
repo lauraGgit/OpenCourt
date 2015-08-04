@@ -41,6 +41,10 @@ Make the `vis` directory for the output of the graph.json
 
     python scotus-runner.py -s 1 -t 5 -x False -g True -o casestiny.json -j graphtiny.json -m 0
 
+It can be helpful to run the scraper in the background using nohup, as the process on a single core takes upwards of 11 hours. There is no explicit logging in the code but the following command will rewrite out the standard out, errors, and cases.json to a log file.
+
+    nohup python scotus-runner.py parms &> log.txt
+
 ####Running Step 3 Example - Building the Graph
 
     python scotus-runner.py -i Downloaded/cases.json -x False -j graphtiny.json -m 1
