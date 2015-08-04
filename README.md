@@ -23,7 +23,7 @@ Install the dependencies:
 
     pip install -r requirements.txt
 
-Copy the sample_config.py into a config.py and add in the following to be able to email yourself notifications:
+Copy the `sample_config.py` into a config.py and add in the following to be able to email yourself notifications:
 
     server = 'smtp.emailserver.com'
     frm_addr = 'from_email_address@yourdomain.com'
@@ -31,7 +31,7 @@ Copy the sample_config.py into a config.py and add in the following to be able t
     user = 'user.for_email_acount'
     passw = 'email_password'
 
-Make the vis directory for the output of the graph.json
+Make the `vis` directory for the output of the graph.json
 
     mkdir vis
 
@@ -47,23 +47,23 @@ Make the vis directory for the output of the graph.json
 
 ####CLI Parameters
 
-"-s", "--vStart": This is the SCOTUS volume to start scraping case names from. The default is 1 (FUN FACT: The early volumes were actually the Supreme Court of the Commonwealth of Pennslyvania and predate the United States)
+`"-s", "--vStart"`: This is the SCOTUS volume to start scraping case names from. The default is 1 (FUN FACT: The early volumes were actually the Supreme Court of the Commonwealth of Pennslyvania and predate the United States)
 
 
-"-t", "--vStop": This is the volume that the scraper will stop collecting case urls from. If ommitted it will default to 1.
+`"-t", "--vStop"`: This is the volume that the scraper will stop collecting case urls from. If ommitted it will default to 1.
 
 
-"-g", "--getcase": Whether or not to actually scrape for the cases. If True, will run the Volume and Case scraper to build a corpus. If False, it will use a json file as specified by the input file parameter to load in cases and build out the network graph. Defaults to False.
+`"-g", "--getcase`": Whether or not to actually scrape for the cases. If True, will run the Volume and Case scraper to build a corpus. If False, it will use a json file as specified by the input file parameter to load in cases and build out the network graph. Defaults to False.
 
-"-o", "--output": The outputfile of the cases scraper. Default is cases.json
+`"-o", "--output"`: The outputfile of the cases scraper. Default is cases.json
 
-"-x", "--stopCase": The number of cases to run scrape after the volume scraper has collected the case URLS. If value is False then will scrape the text of all the cases urls collected in the volume scrape. If not False, the CLI expects an integer value. Default is 30.
+`"-x", "--stopCase"`: The number of cases to run scrape after the volume scraper has collected the case URLS. If value is False then will scrape the text of all the cases urls collected in the volume scrape. If not False, the CLI expects an integer value. Default is 30.
 
-"-i", "--input": If GetCase is false, the program will look for a json file to read in the cases from to build the network graph json or gml file. The default file is cases.json
+`"-i", "--input"`: If GetCase is false, the program will look for a json file to read in the cases from to build the network graph json or gml file. The default file is cases.json
 
-"-j", "--jsonOutput" The filename for the output of the graph json. (Result of Step 3)The default is "graph.json."
+`"-j", "--jsonOutput"`: The filename for the output of the graph json. (Result of Step 3)The default is "graph.json."
 
-"-e", "--emailsend": Because the scraper is timely and memory intensive and can be run remotely. This option allows you to send emails to mark progress". Default is true.
+`"-e", "--emailsend"`: Because the scraper is timely and memory intensive and can be run remotely. This option allows you to send emails to mark progress". Default is true.
 
-"-m", "--gml": Options to encode the graph as gml. 0 = encode just json 1 = encode just gml 2= encode both", default="0")
+`"-m", "--gml"`: Options to encode the graph as gml. 0 = encode just json 1 = encode just gml 2= encode both", default="0")
       
