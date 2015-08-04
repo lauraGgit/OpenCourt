@@ -31,6 +31,9 @@ Copy the sample_config.py into a config.py and add in the following to be able t
     user = 'user.for_email_acount'
     passw = 'email_password'
 
+Make the vis directory for the output of the graph.json
+
+    mkdir vis
 
 ###Running the scraper CLI
 
