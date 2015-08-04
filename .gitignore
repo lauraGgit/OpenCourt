@@ -1,7 +1,7 @@
 Downloaded/
 gephi-export/
 old/
-vis/
+vis/*
 env/
 
 *.json
