@@ -11,7 +11,7 @@ baseURL = "https://supreme.justia.com"
 ### Iterate through Volumes to get cases
 
 def parseArgs():
-  """Operated the CLI parameters"""
+      """Pulling and cleaning the CLI parameters"""
       parser = argparse.ArgumentParser()
       parser.add_argument("-s", "--vStart", help="The volume to start", type=int, default=1)
       parser.add_argument("-t", "--vStop", help="The volume to stop, if omitted will be start", type=int, default=1)
@@ -37,7 +37,7 @@ def parseArgs():
       return args
 
 def main():
-  """Main function to scaffold functions"""
+     """Main function to scaffold functions"""
      args = parseArgs()
 
      # See if scraping has been called

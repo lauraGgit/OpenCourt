@@ -5,13 +5,13 @@ from math import floor
 
 #Class to run through the SCOTUS volumes and collect the Case Names and URLS
 class VolScraper(object):
-	"""Class to Scrape the case names and urls from Justia's Volume Pages"""
+  """Class to Scrape the case names and urls from Justia's Volume Pages"""
   def __init__(self, startVol, stopVol, baseURL):
 		self.sttV = startVol
 		self.stpV = stopVol
 		self.bURL = baseURL
 
-	def scrapeVolumes(self):
+  def scrapeVolumes(self):
           """Scraper Method for the volumes"""
           casesUrls = []
           for i in xrange(self.sttV, (self.stpV + 1)):
