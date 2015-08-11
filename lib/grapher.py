@@ -47,7 +47,7 @@ class GraphBuilder(object):
          for i in xrange(575):
               vols.append([])
          print "Number of Cases: " + str(len(cD))
-         #Iterate through cases to create Nodes
+         #Iterate through cases to create Nodes and a volume dictionary to check cases against
          for case in cD:
               #nodeN= str(case['number'][0])
               c = case['number']
