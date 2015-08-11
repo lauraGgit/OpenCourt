@@ -4,7 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 def sendEmail(per, num, total, startTime):
-    
+    """Sends out periodic emails during the scraping processs"""
     if num == 0:
         subject = "Volumes Scraped Starting Case Scraper"
         text = "There are " + str(total) + " cases to scrape started at " + str(startTime)
@@ -14,6 +14,7 @@ def sendEmail(per, num, total, startTime):
     emailSend(subject, text)
 
 def emailSend(subject, text, smtpserver=config.server):
+    """Server Configuration for the sendEmail"""
     html = "<p>"+text+"</p>"
     part1 = MIMEText(text, 'plain')
     part2 = MIMEText(html, 'html')
