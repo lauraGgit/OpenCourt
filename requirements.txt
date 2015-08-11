@@ -2,3 +2,4 @@ lxml==3.2.0
 argparse==1.3.0
 networkx==1.9.1
 Unidecode==0.4.18
+regex==2015.7.19

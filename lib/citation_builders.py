@@ -1,10 +1,10 @@
-import re, json, unidecode, time
+import regex, json, unidecode, time
 
 class citations(object):
 	"""A separate class to just build and validate the case citations"""
 	def __init__(self, cases, outfile):
 		self.cases = cases
-		self.outfile = outfile
+		self.outfile = outfile+".json"
 
 	@staticmethod
 	def extractCitations(case):
@@ -16,13 +16,13 @@ class citations(object):
 			A list of citations
 
 		"""
-		x = re.findall('(?<!Page )\d{1,3} U. ?S.,? \d{1,4}', case)
+		x = regex.findall('(?<!Page|P.) \d{1,3} U. S. \d{1,4}', case)
 		v = []
 
 		### Get Volume
-		for c in x:
-			d = re.findall('^\d{1,3}', c)
-			s = re.findall('(?<= )\d{1,4}$', c)
+		for c in xrange(len(x)):
+			d = regex.findall('^\d{1,3}', x[c][1:])
+			s = regex.findall('(?<= )\d{1,4}$', x[c][1:])
 			v.append([int(d[0]), int(s[0])])
 		return v
 
@@ -107,6 +107,8 @@ class citations(object):
 				case_citations.append({'name': case['name'], 'url': case['url'], 'txt': case['txt'], 'number': case['number'], 'citations': cleaned, 'vol': case['vol'], 'date': case['date']})
 			else:
 				case_citations.append({'name': case['name'], 'url': case['url'], 'number': case['number'], 'citations': cleaned, 'vol': case['vol'], 'date': case['date']})
+		with open(self.outfile, 'w') as fp:
+			json.dump(case_citations, fp, indent=2)
 		metrics = self.matchMetrics(tC, mC, vC)
 		return case_citations, metrics
 
