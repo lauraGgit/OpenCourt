@@ -109,7 +109,7 @@ class citations(object):
 				case_citations.append({'name': case['name'], 'url': case['url'], 'number': case['number'], 'citations': cleaned, 'vol': case['vol'], 'date': case['date']})
 		with open(self.outfile, 'w') as fp:
 			json.dump(case_citations, fp, indent=2)
-		metrics = self.matchMetrics(tC, mC, vC)
+		metrics = self.matchMetrics(tC, mC, vC, eC)
 		return case_citations, metrics
 
 
