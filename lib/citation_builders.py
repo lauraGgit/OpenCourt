@@ -43,19 +43,60 @@ class citations(object):
 					return 0, lowCite
 		return 0, "NULL"
 
-   	def citeToName(self, cite, nameList):
+   	def citeToName(self, cite):
    		"""Checks if a citation links to a casename"""
-   		for c in xrange(len(nameList)):
+   		for c in xrange(len(self.nameList)):
    			#print nameList[c]['number']
-   			if cite == nameList[c]['number']:
-   				return nameList[c]['name']
+   			if cite == self.cases['number']:
+   				return self.cases['name']
    		return None
 
 	def validateName(self, name, caseToCheck):
-		if caseToCheck.find(name) != -1:
+		if caseToCheck.lower().find(name.lower()) != -1:
 			return True
 		else:
 			return False
+
+	def buildVolList(self):
+		"""Assign each case to a nested Volume List for faster hashing"""
+		vols = []
+		for i in xrange(575):
+			vols.append([])
+        for c in self.cases:
+        	v = c['number'][0] - 1
+         	vols[v].append(c['number'][1])
+        for i in xrange(575):
+        	vols[i].sort()
+        return vols
+
+    def matchMetrics(self, totalCitations, modified, validated):
+    	"""Evaluate the performance of the mathcing algorthims"""
+    	return [totalCitations, float(modified)/float(totalCitations), float(validated)/float(totalCitations)]
+
+	def processText(self, save_text):
+		"""Scaffold for the class"""
+		vols = buildVolList()
+		case_citations = [] 
+		for case in self.cases:
+			cites = self.extractCitations(case['txt'])
+			cleaned = []
+			### Metrics for how many citations were modified tc= Total Citations/ MC modified/ vC Validated
+			tC, mC, vC = 0, 0, 0
+			for cite in xrange(len(cites)):
+				tC = tC + 1
+				x, checkedCite = self.cascadeCase(cite, cases, vols)
+				mC = mC + x
+				n = self.citeToName(checkedCite)
+				val = validateName(n, case['txt'])
+				if val:
+					vC = vC + 1
+				cleaned.append(checkedCite)
+			if save_text:
+				case_citations.append({'name': case['name'], 'url': case['url'], 'txt': case['txt'], 'number': case['number'], 'citations': cleaned, 'vol': case['vol'], 'date': case['date']})
+			else:
+				case_citations.append({'name': case['name'], 'url': case['url'], 'number': case['number'], 'citations': cleaned, 'vol': case['vol'], 'date': case['date']})
+		metrics = self.matchMetrics(tC, mC, vC)
+		return case_citations, metrics
 
 
 
