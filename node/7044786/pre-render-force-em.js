@@ -112,7 +112,7 @@ force
 			} else {
 				console.log('The file was saved!');
 
-        inc.mailing("Check it out on the server girl!", "SCRPIT IS DONE: File was Saved","laura.gerhardt@gmail.com")
+        inc.mailing("Check it out on the server girl!", "SCRPIT IS DONE: File was Saved","to_address@gmail.com")
 			}
 		});
   });
