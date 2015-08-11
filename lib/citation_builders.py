@@ -43,9 +43,10 @@ class citations(object):
 
    	def citeToName(self, cite, nameList):
    		"""Checks if a citation links to a casename"""
-   		for c in nameList:
-   			if cite == nameList['number']:
-   				return nameList['name']
+   		for c in xrange(len(nameList)):
+   			#print nameList[c]['number']
+   			if cite == nameList[c]['number']:
+   				return nameList[c]['name']
    		return None
 
 	def validateName(self, name, caseToCheck):
