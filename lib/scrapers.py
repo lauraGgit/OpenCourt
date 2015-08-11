@@ -54,7 +54,7 @@ class CaseScraper(object):
     def __init__(self, stopCase, caseLinks, outfile, emails, baseurl):
         self.stopCase = stopCase
         self.caseLinks = caseLinks
-        self.outfile = outfile
+        self.outfile = outfile+".json"
         self.emails = emails
         self.baseURL = baseurl
 

@@ -87,10 +87,10 @@ class GraphBuilder(object):
          print str(sC)
          print "Percentage of samecitations " + str(float(sC)/float(sC+oC))
          if self.gml == 1 or self.gml == 2:
-              nx.write_gml(G,"graph.gml")
-              nx.write_gml(G,"graphcomp.gml.gz")
+              nx.write_gml(G,'vis/'+self.outfile+'.gml')
+              nx.write_gml(G,'vis/'+self.outfile+'.gml.gz')
          if self.gml != 1:
               d = json_graph.node_link_data(G)
-              json.dump(d, open('vis/'+self.outfile,'w'))
+              json.dump(d, open('vis/'+self.outfile+'.json','w'))
          #nx.draw(G)
          #plt.savefig("network.png")
