@@ -124,7 +124,12 @@ class CaseScraper(object):
         txt, citations = self.caseParse(cResp)
         return txt, citations
 
-    ### Grab Cases
+
+    def deleteDisclamer(case):
+      """Removes the Justia.com disclaimer from the casetext"""
+      disclaimer = "Disclaimer: Official Supreme Court case law is only found in the print version of the United States Reports. Justia case law is provided for general informational purposes only, and may not reflect current legal developments, verdicts or settlements. We make no warranties or guarantees about the accuracy, completeness, or adequacy of the information contained on this site or information linked to from this site. Please check official sources."
+      case.(disclaimer, "")
+      
     def getCases(self):
          """The scaffold method for the whole class."""
          lt = time.asctime(time.localtime(time.time()))
