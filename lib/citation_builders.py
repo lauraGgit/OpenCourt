@@ -6,7 +6,8 @@ class citations(object):
 		self.cases = cases
 		self.outfile = outfile
 
-	def extCite(self, case):
+	@staticmethod
+	def extractCitations(case):
 		""" Uses Regular expressions to extract the estimated citations from the case text
 		Previously from the scrapers class as caseExtract
 		Args:
@@ -24,6 +25,7 @@ class citations(object):
 			s = re.findall('(?<= )\d{1,4}$', c)
 			v.append([int(d[0]), int(s[0])])
 		return v
+
 	def cascadeCase(self, citation, caseDict, volumes):
 		""" Find the case from the page of the citation (first page of the case)
 		Previously "checkCase" in the Grapher Class

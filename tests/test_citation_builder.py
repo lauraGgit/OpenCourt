@@ -8,9 +8,9 @@ class TestOCMethods(unittest.TestCase):
         cls._citation = citation_builders.citations([], 'outfile.txt')
 
     def test_citeToName(self):
-  
         self.assertEqual(self._citation.citeToName([1,2],test_cases.nameList), "BETHEL v. LLOYD")
         self.assertEqual(self._citation.citeToName([475,8],test_cases.nameList), None)
+    
 
 if __name__ == '__main__':
     unittest.main()

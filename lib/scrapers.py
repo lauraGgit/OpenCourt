@@ -1,6 +1,7 @@
 import urllib2, re, json, unidecode, time
 from lxml import html
-import helper
+import helper 
+from citation_builders import citations
 from math import floor
 
 #Class to run through the SCOTUS volumes and collect the Case Names and URLS
@@ -57,20 +58,27 @@ class CaseScraper(object):
         self.emails = emails
         self.baseURL = baseurl
 
-    ### Scrape citations
-    def caseExtract(self, case):
-              x = re.findall('(?<!Page )\d{1,3} U. ?S.,? \d{1,4}', case)
-              v = []
+    ### Scrape citations - NOW SHOULD CALL FROM citation_builders class
+    # def caseExtract(self, case):
+              
+    #           x = re.findall('(?<!Page )\d{1,3} U. ?S.,? \d{1,4}', case)
+    #           v = []
 
-              ### Get Volume
-              for c in x:
-                   d = re.findall('^\d{1,3}', c)
-                   s = re.findall('(?<= )\d{1,4}$', c)
-                   v.append([int(d[0]), int(s[0])])
-              return v
+    #           ### Get Volume
+    #           for c in x:
+    #                d = re.findall('^\d{1,3}', c)
+    #                s = re.findall('(?<= )\d{1,4}$', c)
+    #                v.append([int(d[0]), int(s[0])])
+    #           return v
 
     ### Get Case numbers
     def urlParse(self, url):
+         """Extracts the case docket page number from the case's url.
+
+         Notes:
+          Has special handling for cases of original jurisdiction.
+          This is apparently the best way to grab the docket number without regex.
+         """
          spl = url.split("/")
          spl2 = spl[-2].split("-")
          dock = spl2[-1]
@@ -82,6 +90,7 @@ class CaseScraper(object):
     #print urlParse(casesUrls[0]['url'])
 
     def caseParse(self, case):
+        """Extract the opinion text from the html return"""
         cTree = html.fromstring(case)
         opinion = cTree.cssselect('div#opinion')
         #should handle error if does not have an opinion page
@@ -89,10 +98,12 @@ class CaseScraper(object):
         for o in opinion:
              op = op + o.text_content()
         unicodeCaseText = unidecode.unidecode(op)
-        caseRef = self.caseExtract(unicodeCaseText)
+        caseRef = citations.extractCitations(unicodeCaseText)
         return unicodeCaseText, caseRef
 
     def setUrls(self, v):
+         """Generate the list of url suffixes depending on the case volume numbers
+         because Justia does not have a consistent case layout"""
          suffix = [""]
          if v < 540:
               suffix.append("case")
@@ -103,6 +114,7 @@ class CaseScraper(object):
          return suffix
 
     def fetchCaseText(self, caseUrl, suffix):
+      """Make the request to Justia to grab the specific page"""
       url = self.baseURL + caseUrl+suffix+".html"
       try:
         cResp = urllib2.urlopen(url).read()
@@ -114,6 +126,7 @@ class CaseScraper(object):
 
     ### Grab Cases
     def getCases(self):
+         """The scaffold method for the whole class."""
          lt = time.asctime(time.localtime(time.time()))
          problemCases, cases = [], []
          cL = self.caseLinks
