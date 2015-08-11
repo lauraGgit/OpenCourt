@@ -62,16 +62,16 @@ class citations(object):
 		vols = []
 		for i in xrange(575):
 			vols.append([])
-        for c in self.cases:
-        	v = c['number'][0] - 1
-         	vols[v].append(c['number'][1])
-        for i in xrange(575):
-        	vols[i].sort()
-        return vols
+		for c in self.cases:
+			v = c['number'][0] - 1
+			vols[v].append(c['number'][1])
+		for i in xrange(575):
+			vols[i].sort()
+		return vols
 
-    def matchMetrics(self, totalCitations, modified, validated):
-    	"""Evaluate the performance of the mathcing algorthims"""
-    	return [totalCitations, float(modified)/float(totalCitations), float(validated)/float(totalCitations)]
+	def matchMetrics(self, totalCitations, modified, validated):
+		"""Evaluate the performance of the mathcing algorthims"""
+		return [totalCitations, float(modified)/float(totalCitations), float(validated)/float(totalCitations)]
 
 	def processText(self, save_text):
 		"""Scaffold for the class"""

@@ -49,7 +49,6 @@ def main():
         #Grab cases
         cScraper = scrapers.CaseScraper(args.stopCase, caseUrls, args.output, args.emailsend, baseURL)
         cases = cScraper.getCases()
-        print cases
         print "Cases scraped"
      #or load from json
      else:
