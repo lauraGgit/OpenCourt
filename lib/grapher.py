@@ -34,7 +34,7 @@ class GraphBuilder(object):
           if citation[1] > c:
             lowCite = [citation[0], c]
             return 0, lowCite
-      return 0, "NULL"      
+      return 0, "NULL"
 
     ### Develop visual Network graph
     ### use networkx
