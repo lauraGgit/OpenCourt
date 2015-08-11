@@ -41,14 +41,14 @@ class citations(object):
 				if citation[1] > c:
 					lowCite = [citation[0], c]
 					return 0, lowCite
-		return 0, "NULL"
+		return 0, None
 
    	def citeToName(self, cite):
    		"""Checks if a citation links to a casename"""
-   		for c in xrange(len(self.nameList)):
+   		for c in self.cases:
    			#print nameList[c]['number']
-   			if cite == self.cases['number']:
-   				return self.cases['name']
+   			if cite == c['number']:
+   				return c['name']
    		return None
 
 	def validateName(self, name, caseToCheck):
@@ -57,40 +57,52 @@ class citations(object):
 		else:
 			return False
 
-	def buildVolList(self):
+	def buildVolCaseList(self):
 		"""Assign each case to a nested Volume List for faster hashing"""
-		vols = []
+		vols, cL = [], []
 		for i in xrange(575):
 			vols.append([])
 		for c in self.cases:
 			v = c['number'][0] - 1
 			vols[v].append(c['number'][1])
+			cL.append(c['number'])
 		for i in xrange(575):
 			vols[i].sort()
-		return vols
+		return vols, cL
 
-	def matchMetrics(self, totalCitations, modified, validated):
+	def matchMetrics(self, totalCitations, modified, validated, errs):
 		"""Evaluate the performance of the mathcing algorthims"""
-		return [totalCitations, float(modified)/float(totalCitations), float(validated)/float(totalCitations)]
+		tc = float(totalCitations)
+		return [tc, float(modified)/tc, float(validated)/tc, float(errs)/tc]
 
 	def processText(self, save_text):
 		"""Scaffold for the class"""
-		vols = buildVolList()
-		case_citations = [] 
+		vols, caseList = self.buildVolCaseList()
+		case_citations = []
 		for case in self.cases:
 			cites = self.extractCitations(case['txt'])
 			cleaned = []
 			### Metrics for how many citations were modified tc= Total Citations/ MC modified/ vC Validated
-			tC, mC, vC = 0, 0, 0
-			for cite in xrange(len(cites)):
+			tC, mC, vC, eC = 0, 0, 0, 0
+			for c in xrange(len(cites)):
 				tC = tC + 1
-				x, checkedCite = self.cascadeCase(cite, cases, vols)
+				x, chckd = self.cascadeCase(cites[c], caseList, vols)
 				mC = mC + x
-				n = self.citeToName(checkedCite)
-				val = validateName(n, case['txt'])
-				if val:
-					vC = vC + 1
-				cleaned.append(checkedCite)
+				if (chckd == None):
+					eC = eC + 1
+				else:
+					if chckd[0] != case['vol'] and chckd[1] != case['number']:
+						n = self.citeToName(chckd)
+						if n != None:
+							valC = self.validateName(n, case['txt'])
+							if valC:
+								vC = vC + 1
+							if chckd not in cleaned:
+								cleaned.append(chckd)
+						else:
+							eC = eC + 1
+			# if len(cleaned) > 0:
+			# 	print cleaned
 			if save_text:
 				case_citations.append({'name': case['name'], 'url': case['url'], 'txt': case['txt'], 'number': case['number'], 'citations': cleaned, 'vol': case['vol'], 'date': case['date']})
 			else:

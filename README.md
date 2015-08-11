@@ -39,15 +39,15 @@ Make the `vis` directory for the output of the graph.json
 
 ####Running Step 1-3 Example - Scraping and Building the Graph
 
-    python scotus-runner.py -p 1 -s 1 -t 5 -x False -o cases -g graph_08_15 -m 0
+    python scotus-runner.py -p 1 -s 1 -t 5 -x False -o cases -g graph_08_15 -f 0
 
 It can be helpful to run the scraper in the background using nohup, as the process on a single core takes upwards of 11 hours. There is no explicit logging in the code but the following command will rewrite out the standard out, errors, and cases.json to a log file.
 
     nohup python scotus-runner.py parms &> log.txt
 
-####Running Step 3 Example - Building the Graph
+####Running Step 3 Example - Building the Graph and output files in both json and gml
 
-    python scotus-runner.py -i Downloaded/cases.json -x False -j graphtiny.json -m 1
+    python scotus-runner.py -p 3 -i preScrapedcases.json -g graphtiny -f 2 -e False
 
 ####CLI Parameters
 
@@ -68,5 +68,5 @@ It can be helpful to run the scraper in the background using nohup, as the proce
 
 `"-e", "--emailsend"`: Because the scraper is timely and memory intensive and can be run remotely. This option allows you to send emails to mark progress". Default is true.
 
-`"-m", "--gml"`: Options to encode the graph as gml. 0 = encode just json 1 = encode just gml 2= encode both", default="0")
+`"-f", "--format"`: File format Output options for the grapher class. 0 = .json only 1 = .gml only 2= output .json and .gml. The program defaults to only JSON.
       

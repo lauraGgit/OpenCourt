@@ -21,9 +21,9 @@ class GraphBuilder(object):
       else:
         return 0
 
-    def checkCase(self, citation, caseDict, volumes):
+    def checkCase(self, citation, caseList, volumes):
       """ Find the case from the page of the citation (first page of the case)"""
-      if citation in caseDict:
+      if citation in caseList:
         return 1, citation
       else:
         #where volume == citation[0], case where floor of case

@@ -19,20 +19,20 @@ def parseArgs():
       parser.add_argument("-o", "--output", help="The outputfile", default="cases.json")
       parser.add_argument("-x", "--stopCase", help="Number of cases to run through per volume. If value is False then will run whole volume.", default=30)
       parser.add_argument("-i", "--input", help="Draw Graph from file", default="cases.json")
+      parser.add_argument("-c", "--citeOutput", help="Output for the citation step", default="cites")
       parser.add_argument("-g", "--graphOutput", help="Graph output prifix for gml and json", default="graph")
       parser.add_argument("-e", "--emailsend", help="Send emails to mark progress", default=True)
-      parser.add_argument("-m", "--gml", help="Encode the graph as gml. 0 = encode just json 1 = encode just gml 2= encode both", type=int, default=0)
+      parser.add_argument("-f", "--format", help="File formats for graph output. 0 = .json only 1 = .gml only 2= output .json and .gml", type=int, default=0)
       args = parser.parse_args()
       args.emailsend = False if args.emailsend != True else True
-      if args.gml == 2 or args.gml == 1:
-            args.gml = args.gml
+      if args.format == 2 or args.format == 1:
+            args.form = args.format
       else:
-            args.gml = 0
+            args.format = 0
       if (args.stopCase == "False"):
           args.stopCase = False
       else:
           args.stopCase = int(args.stopCase)
-      print args
       return args
 
 def main():
@@ -40,10 +40,9 @@ def main():
      args = parseArgs()
 
      # See if scraping has been called
-     if (args.phase == "True"):
+     if (args.phase == 1):
         scrape = scrapers.VolScraper(args.vStart, args.vStop, baseURL)
         caseUrls = scrape.scrapeVolumes()
-
 
         #Grab cases
         cScraper = scrapers.CaseScraper(args.stopCase, caseUrls, args.output, args.emailsend, baseURL)
@@ -55,14 +54,18 @@ def main():
                cases = json.load(fp)
                #print cases
                print "yeha! Json loaded"
+     if (args.phase < 3):
+          CB = citation_builders.citations(cases, args.citeOutput)
+          cites, metrics = CB.processText(True)
+          print cites
+          print metrics
+     else:
+          cites = cases
           
-     grapher.GraphBuilder(cases, args.graphOutput, args.gml, baseURL).drawGraph()
+     grapher.GraphBuilder(cites, args.graphOutput, args.format, baseURL).drawGraph()
      print "done"
      if args.emailsend:
           helper.emailSend('Your Script done', "ALL DONE")
 
 if __name__ == "__main__":
    main()
-
-
-
