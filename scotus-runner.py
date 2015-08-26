@@ -50,14 +50,17 @@ def main():
         print "Cases scraped"
      #or load from json
      else:
-          with open(args.input, 'r') as fp:
-               cases = json.load(fp)
-               #print cases
-               print "yeha! Json loaded"
+          try:
+               with open(args.input, 'r') as fp:
+                    cases = json.load(fp)
+                    #print cases
+                    print "yeha! Json loaded"
+          except EnvironmentError:
+               print "Select select a valid load file."
      if (args.phase < 3):
           CB = citation_builders.citations(cases, args.citeOutput)
           cites, metrics = CB.processText(True)
-          print cites
+          #print cites
           print metrics
      else:
           cites = cases
