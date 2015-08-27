@@ -24,7 +24,8 @@ class GraphBuilder(object):
 
     def drawGraph(self):
          """Build a Network graph from the citations in a json-derived dictionary"""
-         G=nx.Graph()
+         #G=nx.Graph()
+         G=nx.DiGraph()
          cD = self.caseDict
          print "Number of Cases: " + str(len(cD))
          #Iterate through cases to create Nodes and a volume dictionary to check cases against
