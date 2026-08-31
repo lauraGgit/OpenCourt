@@ -45,11 +45,11 @@ It can be helpful to run the scraper in the background using nohup, as the proce
 
     nohup python scotus-runner.py parms &> log.txt
 
-####Running Step 3 Example - Building the Graph and output files in both json and gml
+#### Running Step 3 Example - Building the Graph and output files in both json and gml
 
     python scotus-runner.py -p 3 -i preScrapedcases.json -g graphtiny -f 2 -e False
 
-####CLI Parameters
+#### CLI Parameters
 
 `"-p", "--phase`": What Phase of the Program to begin at. This corresponds to the major components listed above. The options include 1.) Running the whole program (Scrape, Citation, Graph) 2.) Start at the citation building 3.) Just graph.
 
